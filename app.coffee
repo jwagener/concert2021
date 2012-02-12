@@ -65,7 +65,7 @@ window.SpriteView = Backbone.View.extend
     
     if this.model.selfSprite()
       $(this.el).addClass("self")
-    $(this.el).addClass("sprite").addClass(this.model.get("character")).html('<div class="accents"><div class="neck"></div><div class="mohawk"></div><div class="dome"></div><div class="bill"></div><div class="tie"></div><div class="lighter"></div></div><div class="head"><div class="left"></div><div class="right"></div></div><div class="torso"></div><div class="crotch"></div><div class="shoulder left"></div><div class="shoulder right"></div><div class="arm left"></div><div class="arm right"></div><div class="hand left"></div><div class="hand right"></div><div class="leg left"><div class="sock"></div></div><div class="leg right"><div class="sock"></div></div><div class="foot left"></div><div class="foot right"></div>');
+    $(this.el).addClass("sprite").addClass(this.model.get("character")).html('<div class="accents"><div class="skirt"></div><div class="sideburns"><div class="left"></div><div class="right"></div></div><div class="ponytail"><div class="left"></div><div class="right"></div></div><div class="neck"></div><div class="mohawk"></div><div class="dome"></div><div class="bill"></div><div class="tie"></div><div class="belt"><div class="buckle"></div></div><div class="lighter"></div></div><div class="head"><div class="left"></div><div class="right"></div><div class="mouth"></div></div><div class="torso"><div class="tube"></div></div><div class="crotch"></div><div class="shoulder left"></div><div class="shoulder right"></div><div class="arm left"><div class="elbow"></div><div class="hand"></div></div><div class="arm right"><div class="elbow"></div><div class="hand"></div></div><div class="leg left"><div class="sock"></div></div><div class="leg right"><div class="sock"></div></div><div class="foot left"></div><div class="foot right"></div>');
     
   render: ->
     $e = $(this.el)
@@ -106,14 +106,14 @@ window.AppView = Backbone.View.extend
     "keydown": "handleKeyDown"
     "keyup": "handleKeyUp"
 
-  characters: ["punk", "emo", "hooded", "hippie", "eve", "hip", "hannes"]
-  moves: ["raise_right", "raise_left", "raise_right lighter", "walk_left", "walk_right", "", "", ""]
+  characters: ["punk", "emo", "hooded", "hippie", "eve", "hip", "hannes", "ty", "paul", "chick", "pig"]
+  moves:      ["raise_right", "raise_left", "raise_right lighter", "walk_left", "walk_right", "", "", "", "shout", "shout"]
   initialize: ->
     1
-    
+
   render: ->
     #$(this.el).find("#map").html("hi")
-    
+
   getSelfSpriteId: ->
     if !selfSpriteId = localStorage.getItem("selfSpriteId")
       selfSpriteId = "DY" + Math.random()
@@ -183,12 +183,15 @@ window.AppView = Backbone.View.extend
         updateSelfAdd("x", -apx)
         always()
       when 65 # A
-        updateSelf("raiseLeft", !!selfSprite.get("raiseLeft"))
+        updateSelf("raiseLeft", !selfSprite.get("raiseLeft"))
       when 68 # D
-        updateSelf("raiseRight", !!selfSprite.get("raiseRight"))
+        updateSelf("raiseRight", !selfSprite.get("raiseRight"))
       when 83 # S
         c = App.randomCharacter()
         updateSelf("character", c)
+        
+      when 84 # T
+        App.fireAction()
 
   sprites: {}
   addOne: (sprite) ->
@@ -198,12 +201,29 @@ window.AppView = Backbone.View.extend
     window.spriteViews.push(view)
     $("#map").append(view.render().el)
     view
+    
+    
+  fireAction: (action) -> 
+    App.handleAction
+      sprite: selfSprite
+      text: "Hello"
+      trackId: 36401932
+    
+    # 1
+  handleAction: (action) ->
+    SC.stream action.trackId,
+      autoPlay:true
+      onfinish: ->
+        console.log('done')
+    # 2
+    
+    
+    
 
 window.spriteViews = []
 window.sprites = {}
 initialize = ->
   window.App = new AppView
-
   concertRef.on "child_added", (snapshot) ->
     spriteAttributes = snapshot.val()
     sprite = App.sprites[spriteAttributes.id]
@@ -235,19 +255,27 @@ initialize = ->
   # static sprites
   #App.addOne(new Sprite(x: 280, y: 250, trackId: 17211019, character: "hippie"))
   App.addOne(new Sprite(x: 150, y: 350, trackId: 10985476, baseVolume: 90,  npc: true, character: "punk"))
-  App.addOne(new Sprite(x: 210, y: 250, trackId: 293,      baseVolume: 70,  npc: true, character: "hip"))
+  App.addOne(new Sprite(x: 210, y: 250, trackId: 13562452,      baseVolume: 40,  npc: true, character: "pig"))
   App.addOne(new Sprite(x: 100, y: 550, trackId: 35303281, baseVolume: 70,  npc: true, character: "hip"))
-  App.addOne(new Sprite(x: 600, y: 550, trackId: 5952450,  baseVolume: 70,  npc: true, character: "hooded"))
+  App.addOne(new Sprite(x: 600, y: 550, trackId: 5952450,  baseVolume: 70,  npc: true, character: "chick"))
   App.addOne(new Sprite(x: 600, y: 150, trackId: 19636456, baseVolume: 100, npc: true, character: "hooded"))
-  App.addOne(new Sprite(x: 300, y: 700, trackId: 13562452, baseVolume: 100, npc: true, character: "emo"))
-  App.addOne(new Sprite(x: 300, y: 300, trackId: 35156056, baseVolume: 100, npc: true, character: "punk"))
+  App.addOne(new Sprite(x: 300, y: 700, trackId: 13562452, baseVolume: 110, npc: true, character: "emo"))
+  App.addOne(new Sprite(x: 300, y: 300, trackId: 35156056, baseVolume: 120, npc: true, character: "punk"))
+  App.addOne(new Sprite(x: 500, y: 300, trackId: 36399494, baseVolume: 150, npc: true, character: "ty"))
+  App.addOne(new Sprite(x: 800, y: 300, trackId: 21287304, baseVolume: 150, npc: true, character: "hip"))
+  App.addOne(new Sprite(x: 810, y: 330, trackId: 21287304, baseVolume: 150, npc: true, character: "hip"))
+  App.addOne(new Sprite(x: 790, y: 340, trackId: 21287304, baseVolume: 150, npc: true, character: "hip"))
+
+  # cheering
+  
+  
+  SC.stream(20935195, autoPlay: true, loops: 999, volume: 20)
+  
 
 $ ->
   SC.initialize(client_id: "YOUR_CLIENT_ID")
   SC.whenStreamingReady ->
     initialize()
-
-
 
 window.setInterval ->
   for sv in spriteViews
@@ -255,7 +283,6 @@ window.setInterval ->
       $sv = $(sv.el)
       for m in App.moves
         $sv.removeClass(m)
-        
       $sv.addClass App.randomArrayElement(App.moves)
 , 500
 

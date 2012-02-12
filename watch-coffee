@@ -1,0 +1,3 @@
+#!/bin/bash
+coffee -c -w app.coffee
+# run server with $ ponyhost server

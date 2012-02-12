@@ -67,7 +67,7 @@
       if (this.model.selfSprite()) {
         $(this.el).addClass("self");
       }
-      return $(this.el).addClass("sprite").addClass(this.model.get("character")).html('<div class="accents"><div class="neck"></div><div class="mohawk"></div><div class="dome"></div><div class="bill"></div><div class="tie"></div><div class="lighter"></div></div><div class="head"><div class="left"></div><div class="right"></div></div><div class="torso"></div><div class="crotch"></div><div class="shoulder left"></div><div class="shoulder right"></div><div class="arm left"></div><div class="arm right"></div><div class="hand left"></div><div class="hand right"></div><div class="leg left"><div class="sock"></div></div><div class="leg right"><div class="sock"></div></div><div class="foot left"></div><div class="foot right"></div>');
+      return $(this.el).addClass("sprite").addClass(this.model.get("character")).html('<div class="accents"><div class="skirt"></div><div class="sideburns"><div class="left"></div><div class="right"></div></div><div class="ponytail"><div class="left"></div><div class="right"></div></div><div class="neck"></div><div class="mohawk"></div><div class="dome"></div><div class="bill"></div><div class="tie"></div><div class="belt"><div class="buckle"></div></div><div class="lighter"></div></div><div class="head"><div class="left"></div><div class="right"></div><div class="mouth"></div></div><div class="torso"><div class="tube"></div></div><div class="crotch"></div><div class="shoulder left"></div><div class="shoulder right"></div><div class="arm left"><div class="elbow"></div><div class="hand"></div></div><div class="arm right"><div class="elbow"></div><div class="hand"></div></div><div class="leg left"><div class="sock"></div></div><div class="leg right"><div class="sock"></div></div><div class="foot left"></div><div class="foot right"></div>');
     },
     render: function() {
       var $e, c, _i, _len, _ref;
@@ -120,8 +120,8 @@
       "keydown": "handleKeyDown",
       "keyup": "handleKeyUp"
     },
-    characters: ["punk", "emo", "hooded", "hippie", "eve", "hip", "hannes"],
-    moves: ["raise_right", "raise_left", "raise_right lighter", "walk_left", "walk_right", "", "", ""],
+    characters: ["punk", "emo", "hooded", "hippie", "eve", "hip", "hannes", "ty", "paul", "chick", "pig"],
+    moves: ["raise_right", "raise_left", "raise_right lighter", "walk_left", "walk_right", "", "", "", "shout", "shout"],
     initialize: function() {
       return 1;
     },
@@ -198,12 +198,14 @@
           updateSelfAdd("x", -apx);
           return always();
         case 65:
-          return updateSelf("raiseLeft", !!selfSprite.get("raiseLeft"));
+          return updateSelf("raiseLeft", !selfSprite.get("raiseLeft"));
         case 68:
-          return updateSelf("raiseRight", !!selfSprite.get("raiseRight"));
+          return updateSelf("raiseRight", !selfSprite.get("raiseRight"));
         case 83:
           c = App.randomCharacter();
           return updateSelf("character", c);
+        case 84:
+          return App.fireAction();
       }
     },
     sprites: {},
@@ -216,6 +218,21 @@
       window.spriteViews.push(view);
       $("#map").append(view.render().el);
       return view;
+    },
+    fireAction: function(action) {
+      return App.handleAction({
+        sprite: selfSprite,
+        text: "Hello",
+        trackId: 36401932
+      });
+    },
+    handleAction: function(action) {
+      return SC.stream(action.trackId, {
+        autoPlay: true,
+        onfinish: function() {
+          return console.log('done');
+        }
+      });
     }
   });
   window.spriteViews = [];
@@ -271,10 +288,10 @@
     App.addOne(new Sprite({
       x: 210,
       y: 250,
-      trackId: 293,
-      baseVolume: 70,
+      trackId: 13562452,
+      baseVolume: 40,
       npc: true,
-      character: "hip"
+      character: "pig"
     }));
     App.addOne(new Sprite({
       x: 100,
@@ -290,7 +307,7 @@
       trackId: 5952450,
       baseVolume: 70,
       npc: true,
-      character: "hooded"
+      character: "chick"
     }));
     App.addOne(new Sprite({
       x: 600,
@@ -304,18 +321,55 @@
       x: 300,
       y: 700,
       trackId: 13562452,
-      baseVolume: 100,
+      baseVolume: 110,
       npc: true,
       character: "emo"
     }));
-    return App.addOne(new Sprite({
+    App.addOne(new Sprite({
       x: 300,
       y: 300,
       trackId: 35156056,
-      baseVolume: 100,
+      baseVolume: 120,
       npc: true,
       character: "punk"
     }));
+    App.addOne(new Sprite({
+      x: 500,
+      y: 300,
+      trackId: 36399494,
+      baseVolume: 150,
+      npc: true,
+      character: "ty"
+    }));
+    App.addOne(new Sprite({
+      x: 800,
+      y: 300,
+      trackId: 21287304,
+      baseVolume: 150,
+      npc: true,
+      character: "hip"
+    }));
+    App.addOne(new Sprite({
+      x: 810,
+      y: 330,
+      trackId: 21287304,
+      baseVolume: 150,
+      npc: true,
+      character: "hip"
+    }));
+    App.addOne(new Sprite({
+      x: 790,
+      y: 340,
+      trackId: 21287304,
+      baseVolume: 150,
+      npc: true,
+      character: "hip"
+    }));
+    return SC.stream(20935195, {
+      autoPlay: true,
+      loops: 999,
+      volume: 20
+    });
   };
   $(function() {
     SC.initialize({

@@ -23,3 +23,21 @@ body {
 .sprite.self {
   z-index: 500;
 }
+
+
+.sky {
+  background-image: url(fence.png);
+  width: 100%;
+  height: 140px;
+}
+
+.fence {
+  background-image: url(fence.png);
+  width: 100%;
+  height: 140px;
+  position: fixed;
+  bottom: 0px;
+  z-index: 10000;
+  
+  position: absolute;
+}
