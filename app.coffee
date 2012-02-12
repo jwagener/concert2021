@@ -68,7 +68,7 @@ window.SpriteView = Backbone.View.extend
     if this.model.selfSprite()
       $(this.el).addClass("self")
     $(this.el).addClass("sprite").addClass(this.model.get("character")).html('<div class="accents"><div class="skirt"></div><div class="sideburns"><div class="left"></div><div class="right"></div></div><div class="ponytail"><div class="left"></div><div class="right"></div></div><div class="neck"></div><div class="mohawk"></div><div class="dome"></div><div class="bill"></div><div class="tie"></div><div class="belt"><div class="buckle"></div></div><div class="lighter"></div></div><div class="head"><div class="left"></div><div class="right"></div><div class="mouth"></div></div><div class="torso"><div class="tube"></div></div><div class="crotch"></div><div class="shoulder left"></div><div class="shoulder right"></div><div class="arm left"><div class="elbow"></div><div class="hand"></div></div><div class="arm right"><div class="elbow"></div><div class="hand"></div></div><div class="leg left"><div class="sock"></div></div><div class="leg right"><div class="sock"></div></div><div class="foot left"></div><div class="foot right"></div>');
-    
+
   render: ->
     $e = $(this.el)
     $e.css
@@ -97,9 +97,24 @@ window.SpriteView = Backbone.View.extend
       pan = Math.floor(Math.sin(relativeAngle / 360.0 * 2 * Math.PI) * panningEffect)
       this.sound.setVolume(volume)
       this.sound.setPan(pan)
+
+  $: ->
+    return $(this.el)
   
   remove: ->
-    $(this.el).remove()
+    this.$().remove()
+
+  stop: ->
+    this.$().removeClass("walk_left").removeClass("walk_right")
+
+  walk: ->
+    e = this.$()
+    if this.walkState == 0
+      e.addClass("walk_left")
+      this.walkState = 1
+    else
+      this.walkState = 0
+      e.addClass("walk_right")
 
 walkState = 0;
 window.AppView = Backbone.View.extend
@@ -129,13 +144,8 @@ window.AppView = Backbone.View.extend
     arr[Math.ceil(arr.length * Math.random() - 1)]
 
   handleKeyDown: (e) ->
-    if walkState == 0
-      $(spriteViews[0].el).addClass("walk_left")
-      walkState = 1
-    else
-      walkState = 0
-      $(spriteViews[0].el).addClass("walk_right")
-      
+    App.selfSpriteView.walk()
+
     k = e.keyCode
     #if k == 65
     #  $(spriteViews[0].el).toggleClass("raise_left")
@@ -151,8 +161,8 @@ window.AppView = Backbone.View.extend
     apx = 10
     
     always = ->
-      $(spriteViews[0].el).removeClass("walk_left").removeClass("walk_right")
-      $s = $(App.selfSpriteView.el)
+      App.selfSpriteView.stop()
+      $s = App.selfSpriteView.$()
       $w = $(window)
       sRightEdgePosition = $s.position().left + $s.width()
       sBottomEdgePosition = $s.position().top + $s.height()
