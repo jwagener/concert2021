@@ -1,4 +1,6 @@
-window.concertRef = new Firebase('http://gamma.firebase.com:80/concertAppDev');
+window.fb = new Firebase('http://gamma.firebase.com:80/concertAppDev')
+window.concertRef = window.fb.child('sprites')
+window.actions    = window.fb.child('actions')
 
 window.Sprite = Backbone.Model.extend
   initialize: ->
@@ -168,6 +170,8 @@ window.AppView = Backbone.View.extend
       spriteAttributes = selfSprite.toJSON()
       spriteAttributes[attr] = val
       concertRef.child(selfSprite.get("id")).set(spriteAttributes)
+    action = (sqid, act) ->
+      actions.push { sqid: sqid, act: act }
 
     switch e.keyCode
       when 38 # north
@@ -189,6 +193,8 @@ window.AppView = Backbone.View.extend
       when 83 # S
         c = App.randomCharacter()
         updateSelf("character", c)
+      when 81 # Q
+        action(App.getSelfSpriteId(), "shout")
 
   sprites: {}
   addOne: (sprite) ->
@@ -203,6 +209,18 @@ window.spriteViews = []
 window.sprites = {}
 initialize = ->
   window.App = new AppView
+
+  actions.on "child_added", (snapshot) ->
+    attrs = snapshot.val()
+
+    sqid = attrs.sqid
+    if App.getSelfSpriteId() == sqid
+      node = window.actions.child(snapshot.name())
+      if node
+        setTimeout((-> node.remove (a)-> console.log("Action removed.")), 1000)
+
+    else
+      console.log("Handle action ...")
 
   concertRef.on "child_added", (snapshot) ->
     spriteAttributes = snapshot.val()
