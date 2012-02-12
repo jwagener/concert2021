@@ -155,12 +155,14 @@ window.AppView = Backbone.View.extend
       $s = $(App.selfSpriteView.el)
       $w = $(window)
       sRightEdgePosition = $s.position().left + $s.width()
+      sBottomEdgePosition = $s.position().top + $s.height()
       border = 100
       if sRightEdgePosition + border > $w.width() + $w.scrollLeft()
         $w.scrollLeft(sRightEdgePosition + border - $w.width())
         
       if $s.position().left < $w.scrollLeft() + border 
         $(window).scrollLeft($s.position().left - border)
+      # scroll up & down
 
     updateSelfAdd = (attr, val) ->
       spriteAttributes = selfSprite.toJSON()
@@ -277,19 +279,27 @@ initialize = ->
   
   App.addOne(new Sprite(x: 600, y: 150, trackId: 19636456, baseVolume: 100, npc: true, character: "hooded"))
   App.addOne(new Sprite(x: 300, y: 700, trackId: 13562452, baseVolume: 110, npc: true, character: "emo"))
-  App.addOne(new Sprite(x: 300, y: 300, trackId: 35156056, baseVolume: 120, npc: true, character: "punk"))
-  App.addOne(new Sprite(x: 500, y: 300, trackId: 36399494, baseVolume: 150, npc: true, character: "ty"))
   
+  
+  App.addOne(new Sprite(x: 300, y: 300, trackId: 35156056, baseVolume: 120, npc: true, character: "punk"))
+  # ty selling beer
+  App.addOne(new Sprite(x: 500, y: 300, trackId: 36399494, baseVolume: 150, npc: true, character: "ty"))
   # raging crowd
   App.addOne(new Sprite(x: 800, y: 300, trackId: 21287304, baseVolume: 150, npc: true, character: "pig"))
   App.addOne(new Sprite(x: 850, y: 350, trackId: 21287304, baseVolume: 150, npc: true, character: "hip"))
   App.addOne(new Sprite(x: 750, y: 320, trackId: 21287304, baseVolume: 150, npc: true, character: "hip"))
 
+
+  # beavis
+  
+  App.addOne(new Sprite(x: 400, y: 50, trackId: 30358843, baseVolume: 100, npc: true, character: "paul"))
+  
+
   # cheering
   
   # background track
   
-  #SC.stream(20935195, autoPlay: true, loops: 999, volume: 18)
+  SC.stream(20935195, autoPlay: true, loops: 999, volume: 18)
 
 $ ->
   SC.initialize(client_id: "YOUR_CLIENT_ID")

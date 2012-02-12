@@ -161,11 +161,12 @@
       e.originalEvent.preventDefault();
       apx = 10;
       always = function() {
-        var $s, $w, border, sRightEdgePosition;
+        var $s, $w, border, sBottomEdgePosition, sRightEdgePosition;
         $(spriteViews[0].el).removeClass("walk_left").removeClass("walk_right");
         $s = $(App.selfSpriteView.el);
         $w = $(window);
         sRightEdgePosition = $s.position().left + $s.width();
+        sBottomEdgePosition = $s.position().top + $s.height();
         border = 100;
         if (sRightEdgePosition + border > $w.width() + $w.scrollLeft()) {
           $w.scrollLeft(sRightEdgePosition + border - $w.width());
@@ -369,7 +370,7 @@
       npc: true,
       character: "hip"
     }));
-    return App.addOne(new Sprite({
+    App.addOne(new Sprite({
       x: 750,
       y: 320,
       trackId: 21287304,
@@ -377,6 +378,19 @@
       npc: true,
       character: "hip"
     }));
+    App.addOne(new Sprite({
+      x: 400,
+      y: 50,
+      trackId: 30358843,
+      baseVolume: 100,
+      npc: true,
+      character: "paul"
+    }));
+    return SC.stream(20935195, {
+      autoPlay: true,
+      loops: 999,
+      volume: 18
+    });
   };
   $(function() {
     SC.initialize({
