@@ -211,20 +211,15 @@ window.AppView = Backbone.View.extend
       #sprite: selfSprite
       text: "Hello"
       trackId: 36401932
-    
     action.sqid = App.getSelfSpriteId()
     actions.push action
-    
-    # 1
+
   handleAction: (action) ->
     SC.stream action.trackId,
       autoPlay:true
+      volume: 30
       onfinish: ->
-        console.log('done')
-    # 2
-    
-    
-    
+        #console.log('done')
 
 window.spriteViews = []
 window.sprites = {}
@@ -238,7 +233,6 @@ initialize = ->
       node = window.actions.child(snapshot.name())
       if node
         setTimeout((-> node.remove (a)-> console.log("Action removed.")), 1000)
-    console.log("Handle action ...")
     App.handleAction(attrs)
 
   concertRef.on "child_added", (snapshot) ->
@@ -294,7 +288,8 @@ initialize = ->
   # cheering
   
   # background track
-  SC.stream(20935195, autoPlay: true, loops: 999, volume: 18)
+  
+  #SC.stream(20935195, autoPlay: true, loops: 999, volume: 18)
 
 $ ->
   SC.initialize(client_id: "YOUR_CLIENT_ID")

@@ -234,9 +234,8 @@
     handleAction: function(action) {
       return SC.stream(action.trackId, {
         autoPlay: true,
-        onfinish: function() {
-          return console.log('done');
-        }
+        volume: 30,
+        onfinish: function() {}
       });
     }
   });
@@ -258,7 +257,6 @@
           }), 1000);
         }
       }
-      console.log("Handle action ...");
       return App.handleAction(attrs);
     });
     concertRef.on("child_added", function(snapshot) {
@@ -371,7 +369,7 @@
       npc: true,
       character: "hip"
     }));
-    App.addOne(new Sprite({
+    return App.addOne(new Sprite({
       x: 750,
       y: 320,
       trackId: 21287304,
@@ -379,11 +377,6 @@
       npc: true,
       character: "hip"
     }));
-    return SC.stream(20935195, {
-      autoPlay: true,
-      loops: 999,
-      volume: 18
-    });
   };
   $(function() {
     SC.initialize({
