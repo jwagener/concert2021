@@ -67,8 +67,8 @@ window.SpriteView = Backbone.View.extend
     
     if this.model.selfSprite()
       $(this.el).addClass("self")
-    $(this.el).addClass("sprite").addClass(this.model.get("character")).html('<div class="accents"><div class="skirt"></div><div class="sideburns"><div class="left"></div><div class="right"></div></div><div class="ponytail"><div class="left"></div><div class="right"></div></div><div class="neck"></div><div class="mohawk"></div><div class="dome"></div><div class="bill"></div><div class="tie"></div><div class="belt"><div class="buckle"></div></div><div class="lighter"></div></div><div class="head"><div class="left"></div><div class="right"></div><div class="mouth"></div></div><div class="torso"><div class="tube"></div></div><div class="crotch"></div><div class="shoulder left"></div><div class="shoulder right"></div><div class="arm left"><div class="elbow"></div><div class="hand"></div></div><div class="arm right"><div class="elbow"></div><div class="hand"></div></div><div class="leg left"><div class="sock"></div></div><div class="leg right"><div class="sock"></div></div><div class="foot left"></div><div class="foot right"></div>');
-
+    $(this.el).addClass("sprite").addClass(this.model.get("character")).html('<span class="scream"></span><div class="accents"><div class="skirt"></div><div class="sideburns"><div class="left"></div><div class="right"></div></div><div class="ponytail"><div class="left"></div><div class="right"></div></div><div class="neck"></div><div class="mohawk"></div><div class="dome"></div><div class="bill"></div><div class="tie"></div><div class="belt"><div class="buckle"></div></div><div class="lighter"></div></div><div class="head"><div class="left"></div><div class="right"></div><div class="mouth"></div></div><div class="torso"><div class="tube"></div></div><div class="crotch"></div><div class="shoulder left"></div><div class="shoulder right"></div><div class="arm left"><div class="elbow"></div><div class="hand"></div></div><div class="arm right"><div class="elbow"></div><div class="hand"></div></div><div class="leg left"><div class="sock"></div></div><div class="leg right"><div class="sock"></div></div><div class="foot left"></div><div class="foot right"></div>');
+    
   render: ->
     $e = $(this.el)
     $e.css
@@ -204,7 +204,7 @@ window.AppView = Backbone.View.extend
         c = App.randomCharacter()
         updateSelf("character", c)
       when 84 # T
-        App.fireAction(text: prompt("YEAH!"))
+        App.fireAction(text: prompt("What do you want to scream?"))
       when 81 # Q
         App.fireAction(trackId: 36401932)
 
@@ -223,14 +223,35 @@ window.AppView = Backbone.View.extend
     actions.push action
 
   handleAction: (action) ->
-    if action.text
-      console.log(action.text)
-    if action.trackId
-      SC.stream action.trackId,
-        autoPlay:true
-        volume: 30
-        onfinish: ->
-          #console.log('done')
+    if sv = this.findSpriteViewForId(action.sqid)
+      if action.text
+        #        pos = $(sv.el).po
+        $(sv.el).find(".scream").text(action.text).css("display", "initial");
+        
+        
+        #el = $("<span class='scream'></span>").text(action.text)
+        #el.css
+        #  left: pos.left
+        #  top: pos.top
+        #el.appendTo("#map")
+        window.setTimeout ->
+          $(sv.el).find(".scream").fadeOut("slow");
+          #el.remove();
+        , 3000
+        console.log(action.text)
+      if action.trackId
+        SC.stream action.trackId,
+          autoPlay:true
+          volume: 30
+          onfinish: ->
+            #console.log('done')
+          
+  findSpriteViewForId: (id) ->
+    spriteView = null
+    for sv in spriteViews
+      if sv.model.get("id") == id
+        spriteView = sv
+    spriteView
 
 window.spriteViews = []
 window.sprites = {}
@@ -292,7 +313,7 @@ initialize = ->
   
   App.addOne(new Sprite(x: 300, y: 300, trackId: 35156056, baseVolume: 120, npc: true, character: "punk"))
   # ty selling beer
-  App.addOne(new Sprite(x: 500, y: 300, trackId: 36399494, baseVolume: 150, npc: true, character: "ty"))
+  App.addOne(new Sprite(x: 500, y: 300, trackId: 36399494, baseVolume: 125, npc: true, character: "ty"))
   # raging crowd
   App.addOne(new Sprite(x: 800, y: 300, trackId: 21287304, baseVolume: 150, npc: true, character: "pig"))
   App.addOne(new Sprite(x: 850, y: 350, trackId: 21287304, baseVolume: 150, npc: true, character: "hip"))
@@ -301,7 +322,7 @@ initialize = ->
 
   # beavis
   
-  App.addOne(new Sprite(x: 400, y: 50, trackId: 30358843, baseVolume: 100, npc: true, character: "paul"))
+  App.addOne(new Sprite(x: 800, y: 50, trackId: 30358843, baseVolume: 100, npc: true, character: "paul"))
   
 
   # cheering
