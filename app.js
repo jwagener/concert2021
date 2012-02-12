@@ -69,7 +69,7 @@
       if (this.model.selfSprite()) {
         $(this.el).addClass("self");
       }
-      return $(this.el).addClass("sprite").addClass(this.model.get("character")).html('<div class="accents"><div class="skirt"></div><div class="sideburns"><div class="left"></div><div class="right"></div></div><div class="ponytail"><div class="left"></div><div class="right"></div></div><div class="neck"></div><div class="mohawk"></div><div class="dome"></div><div class="bill"></div><div class="tie"></div><div class="belt"><div class="buckle"></div></div><div class="lighter"></div></div><div class="head"><div class="left"></div><div class="right"></div><div class="mouth"></div></div><div class="torso"><div class="tube"></div></div><div class="crotch"></div><div class="shoulder left"></div><div class="shoulder right"></div><div class="arm left"><div class="elbow"></div><div class="hand"></div></div><div class="arm right"><div class="elbow"></div><div class="hand"></div></div><div class="leg left"><div class="sock"></div></div><div class="leg right"><div class="sock"></div></div><div class="foot left"></div><div class="foot right"></div>');
+      return $(this.el).addClass("sprite").addClass(this.model.get("character")).html('<span class="scream"></span><div class="accents"><div class="skirt"></div><div class="sideburns"><div class="left"></div><div class="right"></div></div><div class="ponytail"><div class="left"></div><div class="right"></div></div><div class="neck"></div><div class="mohawk"></div><div class="dome"></div><div class="bill"></div><div class="tie"></div><div class="belt"><div class="buckle"></div></div><div class="lighter"></div></div><div class="head"><div class="left"></div><div class="right"></div><div class="mouth"></div></div><div class="torso"><div class="tube"></div></div><div class="crotch"></div><div class="shoulder left"></div><div class="shoulder right"></div><div class="arm left"><div class="elbow"></div><div class="hand"></div></div><div class="arm right"><div class="elbow"></div><div class="hand"></div></div><div class="leg left"><div class="sock"></div></div><div class="leg right"><div class="sock"></div></div><div class="foot left"></div><div class="foot right"></div>');
     },
     render: function() {
       var $e, c, _i, _len, _ref;
@@ -208,9 +208,13 @@
           c = App.randomCharacter();
           return updateSelf("character", c);
         case 84:
-          return App.fireAction();
+          return App.fireAction({
+            text: prompt("What do you want to scream?")
+          });
         case 81:
-          return App.fireAction();
+          return App.fireAction({
+            trackId: 36401932
+          });
       }
     },
     sprites: {},
@@ -225,19 +229,38 @@
       return view;
     },
     fireAction: function(action) {
-      action = {
-        text: "Hello",
-        trackId: 36401932
-      };
       action.sqid = App.getSelfSpriteId();
       return actions.push(action);
     },
     handleAction: function(action) {
-      return SC.stream(action.trackId, {
-        autoPlay: true,
-        volume: 30,
-        onfinish: function() {}
-      });
+      var sv;
+      if (sv = this.findSpriteViewForId(action.sqid)) {
+        if (action.text) {
+          $(sv.el).find(".scream").text(action.text).css("display", "initial");
+          window.setTimeout(function() {
+            return $(sv.el).find(".scream").fadeOut("slow");
+          }, 3000);
+          console.log(action.text);
+        }
+        if (action.trackId) {
+          return SC.stream(action.trackId, {
+            autoPlay: true,
+            volume: 30,
+            onfinish: function() {}
+          });
+        }
+      }
+    },
+    findSpriteViewForId: function(id) {
+      var spriteView, sv, _i, _len;
+      spriteView = null;
+      for (_i = 0, _len = spriteViews.length; _i < _len; _i++) {
+        sv = spriteViews[_i];
+        if (sv.model.get("id") === id) {
+          spriteView = sv;
+        }
+      }
+      return spriteView;
     }
   });
   window.spriteViews = [];
@@ -350,7 +373,7 @@
       x: 500,
       y: 300,
       trackId: 36399494,
-      baseVolume: 150,
+      baseVolume: 125,
       npc: true,
       character: "ty"
     }));
@@ -379,7 +402,7 @@
       character: "hip"
     }));
     App.addOne(new Sprite({
-      x: 400,
+      x: 800,
       y: 50,
       trackId: 30358843,
       baseVolume: 100,

@@ -10,7 +10,7 @@ body {
 
 #map {
   position: relative;
-  width: 1200px;
+  width: 2000px;
   height: 900px;
 /*  background-image: url(grass.png);*/
 }
@@ -25,7 +25,7 @@ body {
 
 
 .sky {
-  width: 1200px;
+  width: 2000px;
   background-image: url(sky.png);
   height: 160px;
 }
@@ -49,4 +49,14 @@ body {
   height: 180px;
   top: 265px;
   left: 510px;
+}
+
+.scream {
+  position: absolute;
+  margin-left: 100px;
+  margin-top: -14px;
+  font-size: 24px;
+  font-family: "Console";
+  font-weight: bold;
+  width: 150px;
 }
