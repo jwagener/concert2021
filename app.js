@@ -1,6 +1,8 @@
 (function() {
   var initialize, walkState;
-  window.concertRef = new Firebase('http://gamma.firebase.com:80/concertAppDev');
+  window.fb = new Firebase('http://gamma.firebase.com:80/concertAppDev');
+  window.concertRef = window.fb.child('sprites');
+  window.actions = window.fb.child('actions');
   window.Sprite = Backbone.Model.extend({
     initialize: function() {},
     defaults: function() {
@@ -206,6 +208,8 @@
           return updateSelf("character", c);
         case 84:
           return App.fireAction();
+        case 81:
+          return App.fireAction();
       }
     },
     sprites: {},
@@ -220,11 +224,12 @@
       return view;
     },
     fireAction: function(action) {
-      return App.handleAction({
-        sprite: selfSprite,
+      action = {
         text: "Hello",
         trackId: 36401932
-      });
+      };
+      action.sqid = App.getSelfSpriteId();
+      return actions.push(action);
     },
     handleAction: function(action) {
       return SC.stream(action.trackId, {
@@ -239,6 +244,23 @@
   window.sprites = {};
   initialize = function() {
     window.App = new AppView;
+    actions.on("child_added", function(snapshot) {
+      var attrs, node, sqid;
+      attrs = snapshot.val();
+      sqid = attrs.sqid;
+      if (App.getSelfSpriteId() === sqid) {
+        node = window.actions.child(snapshot.name());
+        if (node) {
+          setTimeout((function() {
+            return node.remove(function(a) {
+              return console.log("Action removed.");
+            });
+          }), 1000);
+        }
+      }
+      console.log("Handle action ...");
+      return App.handleAction(attrs);
+    });
     concertRef.on("child_added", function(snapshot) {
       var sprite, spriteAttributes, spriteView;
       spriteAttributes = snapshot.val();

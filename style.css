@@ -5,14 +5,14 @@ body {
   margin: 0;
   padding: 0;
 
-  background-color: brown;
+  background-image: url(grass.png)!important;
 }
 
 #map {
   position: relative;
   width: 3000px;
   height: 900px;
-  background-image: url(grass.png);
+/*  background-image: url(grass.png);*/
 }
 
 .sprite {
@@ -25,11 +25,9 @@ body {
 
 
 .sky {
-  background-image: url(fence.png);
+  background-image: url(sky.png);
   width: 100%;
-  height: 140px;
-  background-color: lightblue;
-  
+  height: 160px;
 }
 
 .fence {

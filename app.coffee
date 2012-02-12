@@ -1,4 +1,6 @@
-window.concertRef = new Firebase('http://gamma.firebase.com:80/concertAppDev');
+window.fb = new Firebase('http://gamma.firebase.com:80/concertAppDev')
+window.concertRef = window.fb.child('sprites')
+window.actions    = window.fb.child('actions')
 
 window.Sprite = Backbone.Model.extend
   initialize: ->
@@ -189,8 +191,9 @@ window.AppView = Backbone.View.extend
       when 83 # S
         c = App.randomCharacter()
         updateSelf("character", c)
-        
       when 84 # T
+        App.fireAction()
+      when 81 # Q
         App.fireAction()
 
   sprites: {}
@@ -204,10 +207,13 @@ window.AppView = Backbone.View.extend
     
     
   fireAction: (action) -> 
-    App.handleAction
-      sprite: selfSprite
+    action =
+      #sprite: selfSprite
       text: "Hello"
       trackId: 36401932
+    
+    action.sqid = App.getSelfSpriteId()
+    actions.push action
     
     # 1
   handleAction: (action) ->
@@ -224,6 +230,17 @@ window.spriteViews = []
 window.sprites = {}
 initialize = ->
   window.App = new AppView
+
+  actions.on "child_added", (snapshot) ->
+    attrs = snapshot.val()
+    sqid = attrs.sqid
+    if App.getSelfSpriteId() == sqid
+      node = window.actions.child(snapshot.name())
+      if node
+        setTimeout((-> node.remove (a)-> console.log("Action removed.")), 1000)
+    console.log("Handle action ...")
+    App.handleAction(attrs)
+
   concertRef.on "child_added", (snapshot) ->
     spriteAttributes = snapshot.val()
     sprite = App.sprites[spriteAttributes.id]
