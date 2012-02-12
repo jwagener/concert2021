@@ -1,7 +1,6 @@
 (function() {
   var initialize, walkState;
   window.concertRef = new Firebase('http://gamma.firebase.com:80/concertAppDev');
-  window.characters = ["punk", "emo", "hooded", "hippie", "eve", "hip", "hannes"];
   window.Sprite = Backbone.Model.extend({
     initialize: function() {},
     defaults: function() {
@@ -18,7 +17,9 @@
         character: "punk",
         actions: [],
         raiseLeft: false,
-        raiseRight: false
+        raiseRight: false,
+        idleSince: 0,
+        npc: false
       };
     },
     distanceTo: function(otherSprite) {
@@ -69,15 +70,16 @@
       return $(this.el).addClass("sprite").addClass(this.model.get("character")).html('<div class="accents"><div class="neck"></div><div class="mohawk"></div><div class="dome"></div><div class="bill"></div><div class="tie"></div><div class="lighter"></div></div><div class="head"><div class="left"></div><div class="right"></div></div><div class="torso"></div><div class="crotch"></div><div class="shoulder left"></div><div class="shoulder right"></div><div class="arm left"></div><div class="arm right"></div><div class="hand left"></div><div class="hand right"></div><div class="leg left"><div class="sock"></div></div><div class="leg right"><div class="sock"></div></div><div class="foot left"></div><div class="foot right"></div>');
     },
     render: function() {
-      var $e, c, _i, _len;
+      var $e, c, _i, _len, _ref;
       $e = $(this.el);
       $e.css({
         left: this.model.get("x"),
         top: this.model.get("y"),
         zIndex: this.model.get("y")
       });
-      for (_i = 0, _len = characters.length; _i < _len; _i++) {
-        c = characters[_i];
+      _ref = App.characters;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        c = _ref[_i];
         $e.removeClass(c);
       }
       $e.addClass(this.model.get("character"));
@@ -91,7 +93,7 @@
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         spriteView = _ref[_i];
-        _results.push(!spriteView.model.get("selfSprite") ? spriteView.updateSound() : void 0);
+        _results.push(!spriteView.model.selfSprite() ? spriteView.updateSound() : void 0);
       }
       return _results;
     },
@@ -118,6 +120,8 @@
       "keydown": "handleKeyDown",
       "keyup": "handleKeyUp"
     },
+    characters: ["punk", "emo", "hooded", "hippie", "eve", "hip", "hannes"],
+    moves: ["raise_right", "raise_left", "raise_right lighter", "walk_left", "walk_right", "", "", ""],
     initialize: function() {
       return 1;
     },
@@ -129,6 +133,12 @@
         localStorage.setItem("selfSpriteId", selfSpriteId);
       }
       return selfSpriteId;
+    },
+    randomCharacter: function() {
+      return this.randomArrayElement(App.characters);
+    },
+    randomArrayElement: function(arr) {
+      return arr[Math.ceil(arr.length * Math.random() - 1)];
     },
     handleKeyDown: function(e) {
       var k;
@@ -145,15 +155,22 @@
       }
     },
     handleKeyUp: function(e) {
-      var KE, KN, KS, KW, always, apx, c, updateSelf, updateSelfAdd;
+      var always, apx, c, updateSelf, updateSelfAdd;
       e.originalEvent.preventDefault();
-      KN = 38;
-      KE = 39;
-      KS = 40;
-      KW = 37;
       apx = 10;
       always = function() {
-        return $(spriteViews[0].el).removeClass("walk_left").removeClass("walk_right");
+        var $s, $w, border, sRightEdgePosition;
+        $(spriteViews[0].el).removeClass("walk_left").removeClass("walk_right");
+        $s = $(App.selfSpriteView.el);
+        $w = $(window);
+        sRightEdgePosition = $s.position().left + $s.width();
+        border = 100;
+        if (sRightEdgePosition + border > $w.width() + $w.scrollLeft()) {
+          $w.scrollLeft(sRightEdgePosition + border - $w.width());
+        }
+        if ($s.position().left < $w.scrollLeft() + border) {
+          return $(window).scrollLeft($s.position().left - border);
+        }
       };
       updateSelfAdd = function(attr, val) {
         var spriteAttributes;
@@ -168,16 +185,16 @@
         return concertRef.child(selfSprite.get("id")).set(spriteAttributes);
       };
       switch (e.keyCode) {
-        case KN:
+        case 38:
           updateSelfAdd("y", -apx);
           return always();
-        case KE:
+        case 39:
           updateSelfAdd("x", apx);
           return always();
-        case KS:
+        case 40:
           updateSelfAdd("y", apx);
           return always();
-        case KW:
+        case 37:
           updateSelfAdd("x", -apx);
           return always();
         case 65:
@@ -185,7 +202,7 @@
         case 68:
           return updateSelf("raiseRight", !!selfSprite.get("raiseRight"));
         case 83:
-          c = characters[Math.ceil(characters.length * Math.random() + 1)];
+          c = App.randomCharacter();
           return updateSelf("character", c);
       }
     },
@@ -197,7 +214,8 @@
         model: sprite
       });
       window.spriteViews.push(view);
-      return $("#map").append(view.render().el);
+      $("#map").append(view.render().el);
+      return view;
     }
   });
   window.spriteViews = [];
@@ -205,7 +223,7 @@
   initialize = function() {
     window.App = new AppView;
     concertRef.on("child_added", function(snapshot) {
-      var sprite, spriteAttributes;
+      var sprite, spriteAttributes, spriteView;
       spriteAttributes = snapshot.val();
       sprite = App.sprites[spriteAttributes.id];
       if (!sprite) {
@@ -213,14 +231,19 @@
         if (sprite.selfSprite()) {
           window.selfSprite = sprite;
         }
-        return App.addOne(sprite);
+        spriteView = App.addOne(sprite);
+        if (sprite.selfSprite()) {
+          return App.selfSpriteView = sprite;
+        }
       }
     });
     concertRef.on("child_changed", function(snapshot) {
       var sprite, spriteAttributes;
       spriteAttributes = snapshot.val();
       sprite = App.sprites[spriteAttributes.id];
-      return sprite.set(spriteAttributes);
+      if (sprite) {
+        return sprite.set(spriteAttributes);
+      }
     });
     concertRef.on("child_removed", function(snapshot) {
       var sprite, spriteAttributes;
@@ -232,16 +255,17 @@
       window.selfSprite = new Sprite({
         x: 280,
         y: 150,
-        character: "hippie",
+        character: App.randomCharacter(),
         id: App.getSelfSpriteId()
       });
-      App.addOne(selfSprite);
+      App.selfSpriteView = App.addOne(selfSprite);
     }
     App.addOne(new Sprite({
       x: 150,
       y: 350,
       trackId: 10985476,
       baseVolume: 90,
+      npc: true,
       character: "punk"
     }));
     App.addOne(new Sprite({
@@ -249,6 +273,7 @@
       y: 250,
       trackId: 293,
       baseVolume: 70,
+      npc: true,
       character: "hip"
     }));
     App.addOne(new Sprite({
@@ -256,14 +281,40 @@
       y: 550,
       trackId: 35303281,
       baseVolume: 70,
+      npc: true,
       character: "hip"
     }));
-    return App.addOne(new Sprite({
+    App.addOne(new Sprite({
       x: 600,
       y: 550,
       trackId: 5952450,
       baseVolume: 70,
+      npc: true,
       character: "hooded"
+    }));
+    App.addOne(new Sprite({
+      x: 600,
+      y: 150,
+      trackId: 19636456,
+      baseVolume: 100,
+      npc: true,
+      character: "hooded"
+    }));
+    App.addOne(new Sprite({
+      x: 300,
+      y: 700,
+      trackId: 13562452,
+      baseVolume: 100,
+      npc: true,
+      character: "emo"
+    }));
+    return App.addOne(new Sprite({
+      x: 300,
+      y: 300,
+      trackId: 35156056,
+      baseVolume: 100,
+      npc: true,
+      character: "punk"
     }));
   };
   $(function() {
@@ -274,4 +325,24 @@
       return initialize();
     });
   });
+  window.setInterval(function() {
+    var $sv, m, sv, _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = spriteViews.length; _i < _len; _i++) {
+      sv = spriteViews[_i];
+      _results.push((function() {
+        var _j, _len2, _ref;
+        if (Math.random() > 0.7 && sv.model.get("npc")) {
+          $sv = $(sv.el);
+          _ref = App.moves;
+          for (_j = 0, _len2 = _ref.length; _j < _len2; _j++) {
+            m = _ref[_j];
+            $sv.removeClass(m);
+          }
+          return $sv.addClass(App.randomArrayElement(App.moves));
+        }
+      })());
+    }
+    return _results;
+  }, 500);
 }).call(this);

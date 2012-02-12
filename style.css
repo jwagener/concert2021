@@ -1,17 +1,20 @@
+html {
+
+}
+
 body {
   margin: 0;
   padding: 0;
+
+  background-color: brown;
 }
 
 #map {
   position: relative;
-  width: 5000px;
-  height: 5000px;
-  border: 1px solid red;
-  background-color: lightgreen;
+  width: 3000px;
+  height: 900px;
   background-image: url(grass.png);
 }
-
 
 .sprite {
   position: absolute;

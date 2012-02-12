@@ -1,7 +1,5 @@
 window.concertRef = new Firebase('http://gamma.firebase.com:80/concertAppDev');
 
-window.characters = ["punk", "emo", "hooded", "hippie", "eve", "hip", "hannes"]
-
 window.Sprite = Backbone.Model.extend
   initialize: ->
     #console.log("there")
@@ -26,6 +24,8 @@ window.Sprite = Backbone.Model.extend
       actions: []
       raiseLeft: false
       raiseRight: false
+      idleSince: 0
+      npc: false
     }
     
   distanceTo: (otherSprite) ->
@@ -74,7 +74,7 @@ window.SpriteView = Backbone.View.extend
       top:  this.model.get("y")
       zIndex: this.model.get("y")
 
-    for c in characters
+    for c in App.characters
       $e.removeClass(c)
     $e.addClass(this.model.get("character"))
     $e.toggleClass("raise_left", this.model.get("raiseLeft"))
@@ -83,7 +83,7 @@ window.SpriteView = Backbone.View.extend
   
   updateSoundForAllSprites: ->
     for spriteView in window.spriteViews
-      if !spriteView.model.get("selfSprite")
+      if !spriteView.model.selfSprite()
         spriteView.updateSound()
     
   updateSound: ->
@@ -105,7 +105,9 @@ window.AppView = Backbone.View.extend
   events:
     "keydown": "handleKeyDown"
     "keyup": "handleKeyUp"
-    
+
+  characters: ["punk", "emo", "hooded", "hippie", "eve", "hip", "hannes"]
+  moves: ["raise_right", "raise_left", "raise_right lighter", "walk_left", "walk_right", "", "", ""]
   initialize: ->
     1
     
@@ -116,13 +118,15 @@ window.AppView = Backbone.View.extend
     if !selfSpriteId = localStorage.getItem("selfSpriteId")
       selfSpriteId = "DY" + Math.random()
       localStorage.setItem("selfSpriteId", selfSpriteId)
-    
     selfSpriteId
-    
-  
+
+  randomCharacter: ->
+    this.randomArrayElement(App.characters)
+
+  randomArrayElement: (arr) -> 
+    arr[Math.ceil(arr.length * Math.random() - 1)]
+
   handleKeyDown: (e) ->
-    
-    
     if walkState == 0
       $(spriteViews[0].el).addClass("walk_left")
       walkState = 1
@@ -142,14 +146,19 @@ window.AppView = Backbone.View.extend
     
   handleKeyUp: (e) ->
     e.originalEvent.preventDefault()
-    KN = 38
-    KE = 39
-    KS = 40
-    KW = 37
     apx = 10
     
     always = ->
       $(spriteViews[0].el).removeClass("walk_left").removeClass("walk_right")
+      $s = $(App.selfSpriteView.el)
+      $w = $(window)
+      sRightEdgePosition = $s.position().left + $s.width()
+      border = 100
+      if sRightEdgePosition + border > $w.width() + $w.scrollLeft()
+        $w.scrollLeft(sRightEdgePosition + border - $w.width())
+        
+      if $s.position().left < $w.scrollLeft() + border 
+        $(window).scrollLeft($s.position().left - border)
 
     updateSelfAdd = (attr, val) ->
       spriteAttributes = selfSprite.toJSON()
@@ -161,27 +170,25 @@ window.AppView = Backbone.View.extend
       concertRef.child(selfSprite.get("id")).set(spriteAttributes)
 
     switch e.keyCode
-      when KN
+      when 38 # north
         updateSelfAdd("y", -apx)
         always()
-      when KE
+      when 39 # east
         updateSelfAdd("x", apx)
         always()
-      when KS
+      when 40 # souht
         updateSelfAdd("y", apx)
         always()
-      when KW
+      when 37 # west
         updateSelfAdd("x", -apx)
         always()
-      when 65
+      when 65 # A
         updateSelf("raiseLeft", !!selfSprite.get("raiseLeft"))
-      when 68
+      when 68 # D
         updateSelf("raiseRight", !!selfSprite.get("raiseRight"))
-      when 83
-        c = characters[Math.ceil(characters.length * Math.random() + 1)]
+      when 83 # S
+        c = App.randomCharacter()
         updateSelf("character", c)
-      #when 
-    
 
   sprites: {}
   addOne: (sprite) ->
@@ -190,19 +197,13 @@ window.AppView = Backbone.View.extend
     
     window.spriteViews.push(view)
     $("#map").append(view.render().el)
+    view
 
 window.spriteViews = []
 window.sprites = {}
 initialize = ->
   window.App = new AppView
-  
-  
-  # self
-  #window.selfSprite = new Sprite(x: 250, y: 250, color: "#f06", selfSprite: true, character: "emo")
-  #App.addOne(selfSprite)
 
-  # dynamic ones
-  
   concertRef.on "child_added", (snapshot) ->
     spriteAttributes = snapshot.val()
     sprite = App.sprites[spriteAttributes.id]
@@ -210,41 +211,52 @@ initialize = ->
       sprite = new Sprite(snapshot.val())
       if sprite.selfSprite()
         window.selfSprite = sprite
-      App.addOne(sprite)
-  
-  
+      spriteView = App.addOne(sprite)
+      if sprite.selfSprite()
+        App.selfSpriteView = sprite 
+
   concertRef.on "child_changed", (snapshot) ->
-    
-    
     spriteAttributes = snapshot.val()
+    #spriteAttributes.set()
     sprite = App.sprites[spriteAttributes.id]
-    sprite.set(spriteAttributes)
-  
+    if sprite
+      sprite.set(spriteAttributes)
+
   concertRef.on "child_removed", (snapshot) ->
     spriteAttributes = snapshot.val()
     sprite = App.sprites[spriteAttributes.id]
     sprite.destroy()
-  
-  
-  # create new self sprite
+
+  # create new self sprite. right now happens always due to race condition
   if !window.selfSprite
-    window.selfSprite = new Sprite(x: 280, y: 150, character: "hippie", id: App.getSelfSpriteId())
-    App.addOne(selfSprite)
-  
+    window.selfSprite = new Sprite(x: 280, y: 150, character: App.randomCharacter(), id: App.getSelfSpriteId())
+    App.selfSpriteView = App.addOne(selfSprite)
+
   # static sprites
   #App.addOne(new Sprite(x: 280, y: 250, trackId: 17211019, character: "hippie"))
-  App.addOne(new Sprite(x: 150, y: 350, trackId: 10985476, baseVolume: 90, character: "punk"))
-  App.addOne(new Sprite(x: 210, y: 250, trackId: 293, baseVolume: 70, character: "hip"))
-
-  App.addOne(new Sprite(x: 100, y: 550, trackId: 35303281, baseVolume: 70, character: "hip"))
-  App.addOne(new Sprite(x: 600, y: 550, trackId: 5952450, baseVolume: 70, character: "hooded"))
-
-
+  App.addOne(new Sprite(x: 150, y: 350, trackId: 10985476, baseVolume: 90,  npc: true, character: "punk"))
+  App.addOne(new Sprite(x: 210, y: 250, trackId: 293,      baseVolume: 70,  npc: true, character: "hip"))
+  App.addOne(new Sprite(x: 100, y: 550, trackId: 35303281, baseVolume: 70,  npc: true, character: "hip"))
+  App.addOne(new Sprite(x: 600, y: 550, trackId: 5952450,  baseVolume: 70,  npc: true, character: "hooded"))
+  App.addOne(new Sprite(x: 600, y: 150, trackId: 19636456, baseVolume: 100, npc: true, character: "hooded"))
+  App.addOne(new Sprite(x: 300, y: 700, trackId: 13562452, baseVolume: 100, npc: true, character: "emo"))
+  App.addOne(new Sprite(x: 300, y: 300, trackId: 35156056, baseVolume: 100, npc: true, character: "punk"))
 
 $ ->
   SC.initialize(client_id: "YOUR_CLIENT_ID")
-  
   SC.whenStreamingReady ->
     initialize()
+
+
+
+window.setInterval ->
+  for sv in spriteViews
+    if Math.random() > 0.7 && sv.model.get("npc") #!sv.model.selfSprite() # only:  sv.model.get("npc")
+      $sv = $(sv.el)
+      for m in App.moves
+        $sv.removeClass(m)
+        
+      $sv.addClass App.randomArrayElement(App.moves)
+, 500
 
     
