@@ -278,14 +278,6 @@
       App.selfSpriteView = App.addOne(selfSprite);
     }
     App.addOne(new Sprite({
-      x: 150,
-      y: 350,
-      trackId: 10985476,
-      baseVolume: 90,
-      npc: true,
-      character: "punk"
-    }));
-    App.addOne(new Sprite({
       x: 210,
       y: 250,
       trackId: 13562452,
@@ -296,16 +288,16 @@
     App.addOne(new Sprite({
       x: 100,
       y: 550,
-      trackId: 35303281,
-      baseVolume: 70,
+      trackId: 8106355,
+      baseVolume: 100,
       npc: true,
-      character: "hip"
+      character: "punk"
     }));
     App.addOne(new Sprite({
       x: 600,
       y: 550,
       trackId: 5952450,
-      baseVolume: 70,
+      baseVolume: 90,
       npc: true,
       character: "chick"
     }));
@@ -347,19 +339,19 @@
       trackId: 21287304,
       baseVolume: 150,
       npc: true,
-      character: "hip"
+      character: "pig"
     }));
     App.addOne(new Sprite({
-      x: 810,
-      y: 330,
+      x: 850,
+      y: 350,
       trackId: 21287304,
       baseVolume: 150,
       npc: true,
       character: "hip"
     }));
     App.addOne(new Sprite({
-      x: 790,
-      y: 340,
+      x: 750,
+      y: 320,
       trackId: 21287304,
       baseVolume: 150,
       npc: true,
@@ -368,7 +360,7 @@
     return SC.stream(20935195, {
       autoPlay: true,
       loops: 999,
-      volume: 20
+      volume: 18
     });
   };
   $(function() {

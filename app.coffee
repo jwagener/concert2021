@@ -254,23 +254,30 @@ initialize = ->
 
   # static sprites
   #App.addOne(new Sprite(x: 280, y: 250, trackId: 17211019, character: "hippie"))
-  App.addOne(new Sprite(x: 150, y: 350, trackId: 10985476, baseVolume: 90,  npc: true, character: "punk"))
+  
+#  App.addOne(new Sprite(x: 150, y: 350, trackId: 10985476, baseVolume: 90,  npc: true, character: "punk"))
+  
+  # weird girl left
   App.addOne(new Sprite(x: 210, y: 250, trackId: 13562452,      baseVolume: 40,  npc: true, character: "pig"))
-  App.addOne(new Sprite(x: 100, y: 550, trackId: 35303281, baseVolume: 70,  npc: true, character: "hip"))
-  App.addOne(new Sprite(x: 600, y: 550, trackId: 5952450,  baseVolume: 70,  npc: true, character: "chick"))
+  # puker left bottom
+  App.addOne(new Sprite(x: 100, y: 550, trackId: 8106355, baseVolume: 100,  npc: true, character: "punk"))
+  # screaming chick
+  App.addOne(new Sprite(x: 600, y: 550, trackId: 5952450,  baseVolume: 90,  npc: true, character: "chick"))
+  
   App.addOne(new Sprite(x: 600, y: 150, trackId: 19636456, baseVolume: 100, npc: true, character: "hooded"))
   App.addOne(new Sprite(x: 300, y: 700, trackId: 13562452, baseVolume: 110, npc: true, character: "emo"))
   App.addOne(new Sprite(x: 300, y: 300, trackId: 35156056, baseVolume: 120, npc: true, character: "punk"))
   App.addOne(new Sprite(x: 500, y: 300, trackId: 36399494, baseVolume: 150, npc: true, character: "ty"))
-  App.addOne(new Sprite(x: 800, y: 300, trackId: 21287304, baseVolume: 150, npc: true, character: "hip"))
-  App.addOne(new Sprite(x: 810, y: 330, trackId: 21287304, baseVolume: 150, npc: true, character: "hip"))
-  App.addOne(new Sprite(x: 790, y: 340, trackId: 21287304, baseVolume: 150, npc: true, character: "hip"))
+  
+  # raging crowd
+  App.addOne(new Sprite(x: 800, y: 300, trackId: 21287304, baseVolume: 150, npc: true, character: "pig"))
+  App.addOne(new Sprite(x: 850, y: 350, trackId: 21287304, baseVolume: 150, npc: true, character: "hip"))
+  App.addOne(new Sprite(x: 750, y: 320, trackId: 21287304, baseVolume: 150, npc: true, character: "hip"))
 
   # cheering
   
-  
-  SC.stream(20935195, autoPlay: true, loops: 999, volume: 20)
-  
+  # background track
+  SC.stream(20935195, autoPlay: true, loops: 999, volume: 18)
 
 $ ->
   SC.initialize(client_id: "YOUR_CLIENT_ID")
