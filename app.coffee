@@ -194,9 +194,9 @@ window.AppView = Backbone.View.extend
         c = App.randomCharacter()
         updateSelf("character", c)
       when 84 # T
-        App.fireAction()
+        App.fireAction(text: prompt("YEAH!"))
       when 81 # Q
-        App.fireAction()
+        App.fireAction(trackId: 36401932)
 
   sprites: {}
   addOne: (sprite) ->
@@ -209,19 +209,18 @@ window.AppView = Backbone.View.extend
     
     
   fireAction: (action) -> 
-    action =
-      #sprite: selfSprite
-      text: "Hello"
-      trackId: 36401932
     action.sqid = App.getSelfSpriteId()
     actions.push action
 
   handleAction: (action) ->
-    SC.stream action.trackId,
-      autoPlay:true
-      volume: 30
-      onfinish: ->
-        #console.log('done')
+    if action.text
+      console.log(action.text)
+    if action.trackId
+      SC.stream action.trackId,
+        autoPlay:true
+        volume: 30
+        onfinish: ->
+          #console.log('done')
 
 window.spriteViews = []
 window.sprites = {}
