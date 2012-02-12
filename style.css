@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  position: relative;
+  width: 5000px;
+  height: 5000px;
+  border: 1px solid red;
+  background-color: lightgreen;
+  background-image: url(grass.png);
+}
+
+
+.sprite {
+  position: absolute;
+}
+
+.sprite.self {
+  z-index: 500;
+}
