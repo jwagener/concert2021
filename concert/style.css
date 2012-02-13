@@ -1,0 +1,94 @@
+
+body {
+  margin: 0;
+  padding: 0;
+
+  background-image: url(grass.png)!important;
+}
+
+#map {
+  position: relative;
+  width: 2000px;
+  height: 900px;
+/*  background-image: url(grass.png);*/
+}
+
+.sprite {
+  position: absolute;
+}
+
+.sprite.self {
+  z-index: 500;
+}
+
+
+.sky {
+  width: 2000px;
+  background-image: url(sky.png);
+  height: 160px;
+}
+
+.fence {
+  background-image: url(fence.png);
+  width: 100%;
+  height: 140px;
+  position: fixed;
+  bottom: 0px;
+  z-index: 10000;
+  
+  position: absolute;
+}
+
+.booth {
+  background-image: url(booth.png);
+  position: absolute;
+  z-index: 310;
+  width: 120px;
+  height: 180px;
+  top: 265px;
+  left: 510px;
+}
+
+.scream {
+  position: absolute;
+  margin-left: 100px;
+  margin-top: -14px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  width: 150px;
+}
+
+
+.object {
+  position: absolute;
+}
+
+.ball  { top: 300px; left: 940px; }
+.shirt { top: 700px; left: 600px; }
+.spliff { top: 100px; left: 800px; }
+.puke { top: 800px; left: 200px; }
+
+.poster { bottom: 50px; left: 100px; z-index: 999339;}
+.pizza { top: 130px; left: 930px;}
+.cat { top: 200px; left: 750px; }
+
+.dog { top: 600px; left: 1020px; }
+
+.boombox { top: 50px; left: 640px}
+
+.blanket { top: 430px; left: 695px }
+.beer { top: 655px; left: 659px}
+
+.hoodie { top: 700px; left: 10px}
+
+.burger { top: 300px; left: 1200px; }
+
+
+.alex {
+  background-image: url(/images/alex_eric.png)!important;
+  width: 150px;
+  height: 150px;
+  top: 400px;
+  left: 50px;
+}

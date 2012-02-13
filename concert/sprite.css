@@ -1,0 +1,717 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+font,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
+ margin: 0;
+ padding: 0;
+ border: 0;
+ outline: 0;
+ font-weight: inherit;
+ font-style: inherit;
+ font-family: inherit;
+ font-size: 100%;
+ vertical-align: baseline;
+}
+body {
+ line-height: 1;
+ color: #000;
+ background: #fff;
+}
+ol,
+ul {
+ list-style: none;
+}
+table {
+ border-collapse: separate;
+ border-spacing: 0;
+ vertical-align: middle;
+}
+caption,
+th,
+td {
+ text-align: left;
+ font-weight: normal;
+ vertical-align: middle;
+}
+a img {
+ border: none;
+}
+.sprite {
+ height: 130px;
+ width: 130px;
+}
+.sprite div {
+ height: 10px;
+ width: 10px;
+}
+.sprite .head {
+ position: absolute;
+ left: 50px;
+ top: 20px;
+ height: 30px;
+ width: 30px;
+}
+.sprite .head .left,
+.sprite .head .right {
+ height: 30px;
+}
+.sprite .head .right {
+ position: absolute;
+ top: 0;
+ right: 0;
+}
+.sprite .head .mouth {
+ background: #600000;
+ display: none;
+ position: absolute;
+ left: 10px;
+ top: 20px;
+}
+.sprite .torso {
+ position: absolute;
+ left: 50px;
+ top: 50px;
+ height: 30px;
+ width: 30px;
+}
+.sprite .torso .tube {
+ position: absolute;
+ bottom: 0;
+ ((null)): 0;
+ height: 20px;
+ width: 30px;
+}
+.sprite .crotch {
+ position: absolute;
+ left: 60px;
+ top: 80px;
+}
+.sprite .shoulder.left {
+ position: absolute;
+ left: 40px;
+ top: 50px;
+}
+.sprite .shoulder.right {
+ position: absolute;
+ left: 80px;
+ top: 50px;
+}
+.sprite .arm {
+ height: 30px;
+}
+.sprite .arm.left {
+ position: absolute;
+ left: 30px;
+ top: 50px;
+}
+.sprite .arm.right {
+ position: absolute;
+ left: 90px;
+ top: 50px;
+}
+.sprite .arm .elbow {
+ position: absolute;
+ top: 0;
+ ((null)): 0;
+}
+.sprite .arm .hand {
+ position: absolute;
+ bottom: 0;
+ ((null)): 0;
+}
+.sprite .leg {
+ height: 40px;
+ position: relative;
+}
+.sprite .leg.left {
+ position: absolute;
+ left: 50px;
+ top: 80px;
+}
+.sprite .leg.right {
+ position: absolute;
+ left: 70px;
+ top: 80px;
+}
+.sprite .leg .sock {
+ background: none;
+ height: 20px;
+ position: absolute;
+ bottom: -10px;
+ ((null)): 0;
+}
+.sprite .foot {
+ width: 20px;
+}
+.sprite .foot.left {
+ position: absolute;
+ left: 40px;
+ top: 120px;
+}
+.sprite .foot.right {
+ position: absolute;
+ left: 70px;
+ top: 120px;
+}
+.sprite.walk_left .leg.left {
+ height: 30px;
+}
+.sprite.walk_left .foot.left {
+ top: 110px;
+}
+.sprite.walk_left .hand.right {
+ top: 60px;
+}
+.sprite.walk_left .arm.right {
+ height: 20px;
+}
+.sprite.walk_right .leg.right {
+ height: 30px;
+}
+.sprite.walk_right .foot.right {
+ top: 110px;
+}
+.sprite.walk_right .hand.left {
+ top: 60px;
+}
+.sprite.walk_right .arm.left {
+ height: 20px;
+}
+.sprite.raise_right .arm.right {
+ height: 30px;
+ top: 30px;
+}
+.sprite.raise_right .arm.right .hand {
+ position: absolute;
+ top: 0;
+ ((null)): 0;
+}
+.sprite.raise_right .arm.right .elbow {
+ position: absolute;
+ left: 0px;
+ top: 20px;
+}
+.sprite.raise_left .arm.left {
+ height: 30px;
+ top: 30px;
+}
+.sprite.raise_left .arm.left .hand {
+ position: absolute;
+ top: 0;
+ ((null)): 0;
+}
+.sprite.raise_left .arm.left .elbow {
+ position: absolute;
+ left: 0px;
+ top: 20px;
+}
+.sprite.raise_lighter .accents .lighter {
+ display: block;
+}
+.sprite.shout .mouth {
+ display: block;
+}
+.sprite .accents {
+ height: 130px;
+ width: 130px;
+}
+.sprite .accents div {
+ z-index: 10;
+}
+.sprite .accents .sideburns {
+ position: absolute;
+ left: 50px;
+ top: 20px;
+ width: 30px;
+}
+.sprite .accents .sideburns .right {
+ position: absolute;
+ left: 20px;
+ top: 0px;
+}
+.sprite .accents .ponytail {
+ width: 70px;
+ position: absolute;
+ left: 30px;
+ top: 30px;
+}
+.sprite .accents .ponytail div {
+ width: 20px;
+}
+.sprite .accents .ponytail .right {
+ position: absolute;
+ left: 50px;
+ top: 0px;
+}
+.sprite .accents .mohawk {
+ position: absolute;
+ left: 60px;
+ top: 10px;
+}
+.sprite .accents .neck {
+ position: absolute;
+ left: 60px;
+ top: 50px;
+}
+.sprite .accents .dome {
+ position: absolute;
+ left: 50px;
+ top: 10px;
+ width: 30px;
+}
+.sprite .accents .bill {
+ position: absolute;
+ left: 80px;
+ top: 20px;
+}
+.sprite .accents .tie {
+ height: 30px;
+ position: absolute;
+ left: 60px;
+ top: 50px;
+}
+.sprite .accents .belt {
+ position: absolute;
+ left: 50px;
+ top: 80px;
+ width: 30px;
+}
+.sprite .accents .belt .buckle {
+ position: absolute;
+ left: 10px;
+ top: 0px;
+}
+.sprite .accents .skirt {
+ height: 20px;
+ position: absolute;
+ left: 50px;
+ top: 90px;
+ width: 30px;
+}
+.sprite .accents .lighter {
+ -webkit-animation: pulse 2s infinite;
+ -moz-animation: pulse 2s infinite;
+ animation: pulse 2s infinite;
+ background: #ff0;
+ -webkit-box-shadow: 0 0 0 10px rgba(255,255,0,0.25);
+ -moz-box-shadow: 0 0 0 10px rgba(255,255,0,0.25);
+ box-shadow: 0 0 0 10px rgba(255,255,0,0.25);
+ display: none;
+ position: absolute;
+ left: 90px;
+ top: 20px;
+}
+.sprite .head,
+.sprite .torso,
+.sprite .crotch,
+.sprite .shoulder,
+.sprite .arm,
+.sprite .hand,
+.sprite .elbow,
+.sprite .leg,
+.sprite .foot {
+ background: #fc6;
+}
+.sprite.ty .torso {
+ background: #fff;
+}
+.sprite.ty .shoulder {
+ background: #fff;
+}
+.sprite.ty .leg,
+.sprite.ty .crotch {
+ background: #d3d3d3;
+}
+.sprite.ty .dome {
+ background: #ff0;
+}
+.sprite.ty .sideburns div {
+ background: #ff0;
+}
+.sprite.ty .ponytail div {
+ background: #ff0;
+}
+.sprite.ty .foot {
+ background: #a9a9a9;
+}
+.sprite.paul .belt {
+ background: #000;
+}
+.sprite.paul .belt .buckle {
+ background: #c0c0c0;
+}
+.sprite.paul .dome {
+ background: #cd853f;
+}
+.sprite.paul .sideburns div {
+ background: #cd853f;
+}
+.sprite.paul .leg,
+.sprite.paul .crotch {
+ background: Navy;
+}
+.sprite.paul .foot {
+ background: #a9a9a9;
+}
+.sprite.paul .tie {
+ background: MediumSeaGreen;
+}
+.sprite.paul .torso {
+ background: #006400;
+}
+.sprite.paul .shoulder {
+ background: #006400;
+}
+.sprite.paul .arm,
+.sprite.paul .elbow {
+ background: #006400;
+}
+.sprite.punk .hand {
+ background: #000;
+}
+.sprite.punk .mohawk {
+ background: #0f0;
+}
+.sprite.punk .leg,
+.sprite.punk .crotch {
+ background: #000;
+}
+.sprite.punk .foot {
+ background: #804000;
+}
+.sprite.punk .sock {
+ background: #804000;
+}
+.sprite.punk .torso {
+ background: #666;
+}
+.sprite.punk .neck {
+ background: #fc6;
+}
+.sprite.hip .head,
+.sprite.hip .torso,
+.sprite.hip .crotch,
+.sprite.hip .shoulder,
+.sprite.hip .arm,
+.sprite.hip .hand,
+.sprite.hip .elbow,
+.sprite.hip .leg,
+.sprite.hip .foot {
+ background: #804000;
+}
+.sprite.hip .dome,
+.sprite.hip .bill {
+ background: #ff8000;
+}
+.sprite.hip .leg,
+.sprite.hip .crotch {
+ background: #666;
+}
+.sprite.hip .foot {
+ background: #00f;
+}
+.sprite.hip .torso {
+ background: #000;
+}
+.sprite.hippie .torso {
+ background: #ff6;
+}
+.sprite.hippie .leg,
+.sprite.hippie .crotch {
+ background: #808000;
+}
+.sprite.emo .dome {
+ background: #000;
+}
+.sprite.emo .sideburns div {
+ background: #000;
+}
+.sprite.emo .leg,
+.sprite.emo .crotch {
+ background: #000;
+}
+.sprite.emo .foot {
+ background: #000;
+}
+.sprite.emo .tie {
+ background: #fff;
+}
+.sprite.emo .torso {
+ background: #000;
+}
+.sprite.emo .shoulder {
+ background: #000;
+}
+.sprite.hooded .leg,
+.sprite.hooded .crotch {
+ background: #486b93;
+}
+.sprite.hooded .foot {
+ background: #000;
+}
+.sprite.hooded .sock {
+ background: #73abe8;
+}
+.sprite.hooded .tie {
+ background: #fe0000;
+}
+.sprite.hooded .torso {
+ background: #929292;
+}
+.sprite.hooded .shoulder {
+ background: #929292;
+}
+.sprite.hooded .dome,
+.sprite.hooded .head div {
+ background: #929292;
+}
+.sprite.hannes .torso {
+ background: #00008b;
+}
+.sprite.hannes .shoulder {
+ background: #00008b;
+}
+.sprite.hannes .arm,
+.sprite.hannes .elbow {
+ background: #00008b;
+}
+.sprite.hannes .leg,
+.sprite.hannes .crotch {
+ background: #a9a9a9;
+}
+.sprite.hannes .foot {
+ background: #000;
+}
+.sprite.hannes .sock {
+ background: #d3d3d3;
+}
+.sprite.hannes .dome,
+.sprite.hannes .head div {
+ background: #00008b;
+}
+.sprite.eve .crotch {
+ background: #008000;
+}
+.sprite.chick .belt {
+ background: #008efe;
+}
+.sprite.chick .belt .buckle {
+ background: #ff8e01;
+}
+.sprite.chick .dome {
+ background: #9c4f00;
+}
+.sprite.chick .sideburns div {
+ background: #9c4f00;
+}
+.sprite.chick .ponytail div {
+ background: #9c4f00;
+}
+.sprite.chick .foot {
+ background: #a30100;
+}
+.sprite.chick .skirt {
+ background: #00fed9;
+}
+.sprite.chick .torso {
+ background: #00fed9;
+}
+.sprite.chick .neck {
+ background: #fc6;
+}
+.sprite.pig .leg,
+.sprite.pig .crotch {
+ background: #000;
+}
+.sprite.pig .dome {
+ background: #f9ff01;
+}
+.sprite.pig .sideburns div {
+ background: #f9ff01;
+}
+.sprite.pig .ponytail .right {
+ background: #f9ff01;
+}
+.sprite.pig .foot {
+ background: #9c4f00;
+}
+.sprite.pig .sock {
+ background: #9c4f00;
+}
+.sprite.pig .sock {
+ position: absolute;
+ bottom: 0;
+ ((null)): 0;
+}
+.sprite.pig .tube {
+ background: #fff;
+}
+.object {
+ background: url("/images/objects.png");
+}
+.object.ball {
+ height: 60px;
+ width: 60px;
+}
+.object.shirt {
+ background-position: -100px 0;
+ height: 40px;
+ width: 50px;
+}
+.object.spliff {
+ background-position: -200px 0;
+ height: 50px;
+ width: 50px;
+}
+.object.puke {
+ background-position: -300px 0;
+ height: 50px;
+ width: 50px;
+}
+.object.poster {
+ background-position: -400px 0;
+ height: 70px;
+ width: 50px;
+}
+.object.pizza {
+ background-position: -500px 0;
+ height: 50px;
+ width: 40px;
+}
+.object.cat {
+ background-position: -600px 0;
+ height: 40px;
+ width: 60px;
+}
+.object.hoodie {
+ background-position: -700px 0;
+ height: 80px;
+ width: 70px;
+}
+.object.dog {
+ background-position: -800px 0;
+ height: 40px;
+ width: 50px;
+}
+.object.burger {
+ background-position: -900px 0;
+ height: 40px;
+ width: 40px;
+}
+.object.boombox {
+ background-position: -1000px 0;
+ height: 80px;
+ width: 100px;
+}
+.object.blanket {
+ background-position: -1100px 0;
+ height: 90px;
+ width: 90px;
+}
+.object.beer {
+ background-position: -1200px 0;
+ height: 40px;
+ width: 20px;
+}
+@-moz-keyframes pulse {
+ 0% {
+   opacity: 1;
+   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+ }
+
+ 50% {
+   opacity: 0.75;
+   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75);
+ }
+
+ 100% {
+   opacity: 1;
+   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+ }
+}
+@-webkit-keyframes pulse {
+ 0% {
+   opacity: 1;
+   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+ }
+
+ 50% {
+   opacity: 0.75;
+   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75);
+ }
+
+ 100% {
+   opacity: 1;
+   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+ }
+}
+@keyframes pulse {
+ 0% {
+   opacity: 1;
+   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+ }
+
+ 50% {
+   opacity: 0.75;
+   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75);
+ }
+
+ 100% {
+   opacity: 1;
+   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+ }
+}
