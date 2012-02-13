@@ -97,9 +97,24 @@ window.SpriteView = Backbone.View.extend
       pan = Math.floor(Math.sin(relativeAngle / 360.0 * 2 * Math.PI) * panningEffect)
       this.sound.setVolume(volume)
       this.sound.setPan(pan)
+
+  $: ->
+    return $(this.el)
   
   remove: ->
-    $(this.el).remove()
+    this.$().remove()
+
+  stop: ->
+    this.$().removeClass("walk_left").removeClass("walk_right")
+
+  walk: ->
+    e = this.$()
+    if this.walkState == 0
+      e.addClass("walk_left")
+      this.walkState = 1
+    else
+      this.walkState = 0
+      e.addClass("walk_right")
 
 walkState = 0;
 window.AppView = Backbone.View.extend
@@ -129,13 +144,8 @@ window.AppView = Backbone.View.extend
     arr[Math.ceil(arr.length * Math.random() - 1)]
 
   handleKeyDown: (e) ->
-    if walkState == 0
-      $(spriteViews[0].el).addClass("walk_left")
-      walkState = 1
-    else
-      walkState = 0
-      $(spriteViews[0].el).addClass("walk_right")
-      
+    App.selfSpriteView.walk()
+
     k = e.keyCode
     #if k == 65
     #  $(spriteViews[0].el).toggleClass("raise_left")
@@ -151,8 +161,8 @@ window.AppView = Backbone.View.extend
     apx = 10
     
     always = ->
-      $(spriteViews[0].el).removeClass("walk_left").removeClass("walk_right")
-      $s = $(App.selfSpriteView.el)
+      App.selfSpriteView.stop()
+      $s = App.selfSpriteView.$()
       $w = $(window)
       sRightEdgePosition = $s.position().left + $s.width()
       sBottomEdgePosition = $s.position().top + $s.height()
